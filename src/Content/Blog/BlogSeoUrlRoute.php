@@ -41,7 +41,7 @@ class BlogSeoUrlRoute implements SeoUrlRouteInterface
             'blogCategories',
             'blogAuthor',
             'tags',
-            'seoUrls'       
+            'cmsPage'       
         ]);
     }
 
