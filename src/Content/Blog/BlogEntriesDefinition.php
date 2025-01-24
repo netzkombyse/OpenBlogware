@@ -92,7 +92,7 @@ class BlogEntriesDefinition extends EntityDefinition
                 SeoUrlDefinition::class,      // Ziel-Definition
                 'foreign_key',                // Fremdschlüssel in der SEO-URL-Tabelle
                 'id'                          // ID der BlogEntries-Definition
-            ))->addFlags(new ApiAware(), new CascadeDelete())*/,
+            ))->addFlags(new ApiAware(), new CascadeDelete()),*/
 
         ]);
     }
