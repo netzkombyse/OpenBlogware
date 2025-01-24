@@ -3,6 +3,7 @@
     {% if article.blogCategories.elements|length > 0 %}
         {% set categoryClasses = article.blogCategories.elements|map(c => 'blog-category-' ~ c.id)|join(' ') %}
     {% endif %}
+dump(article);
     <article class="card blog-card {{categoryClasses}}">
         {% block werkl_blog_card_teaser_image %}
             <a href="{{ seoUrl('werkl.frontend.blog.detail', {'articleId': article.id}) }}"
