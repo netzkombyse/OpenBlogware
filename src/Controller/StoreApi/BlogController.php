@@ -86,9 +86,9 @@ class BlogController extends AbstractBlogController
         }
 
         $criteria->addAssociations(['blogAuthor.salutation','blogCategories','tags','cmsPage.sections','cmsPage.sections.blocks','cmsPage.sections.blocks.slots','seoUrls']);
-        $criteria->getAssociation('seoUrls')->addFilter(
+        /*$criteria->getAssociation('seoUrls')->addFilter(
             new EqualsFilter('routeName', 'werkl.frontend.blog.detail')
-        );
+        );*/
 
         return $criteria;
     }
