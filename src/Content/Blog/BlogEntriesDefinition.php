@@ -92,10 +92,7 @@ class BlogEntriesDefinition extends EntityDefinition
                 SeoUrlDefinition::class,      // Ziel-Definition
                 'foreign_key',                // Fremdschlüssel in der SEO-URL-Tabelle
                 'id'                          // Primärschlüssel der BlogEntries-Tabelle
-            ))->addFlags(new ApiAware(), new CascadeDelete())
-              ->setReferenceDefinitionFilter([
-                  'route_name' => 'werkl.frontend.blog.detail' // Filter für die Route
-              ]),
+            ))->addFlags(new ApiAware(), new CascadeDelete()),
 
         ]);
     }
