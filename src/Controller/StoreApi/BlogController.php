@@ -85,7 +85,7 @@ class BlogController extends AbstractBlogController
             }
         }
 
-        $criteria->addAssociations(['blogAuthor.salutation', 'blogCategories', 'tags','cmsPage.sections','cmsPage.sections.blocks','cmsPage.sections.blocks.slots','seoUrls']);
+        $criteria->addAssociations(['blogAuthor.salutation', 'tags','cmsPage.sections','cmsPage.sections.blocks','cmsPage.sections.blocks.slots','seoUrls']);
 
         return $criteria;
     }
