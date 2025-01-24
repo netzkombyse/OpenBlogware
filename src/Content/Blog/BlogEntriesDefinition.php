@@ -87,12 +87,12 @@ class BlogEntriesDefinition extends EntityDefinition
             (new ManyToManyAssociationField('tags', TagDefinition::class, 'werkl_blog_entries_tag', 'werkl_blog_entries_id', 'tag_id'))->addFlags(new ApiAware()),
                                    
             // SEO-URLs Assoziation hinzufügen
-            (new OneToManyAssociationField(
+            /*(new OneToManyAssociationField(
                 'seoUrls',                    // Name der Assoziation
                 SeoUrlDefinition::class,      // Ziel-Definition
                 'foreign_key',                // Fremdschlüssel in der SEO-URL-Tabelle
                 'id'                          // ID der BlogEntries-Definition
-            ))->addFlags(new ApiAware(), new CascadeDelete()),
+            ))->addFlags(new ApiAware(), new CascadeDelete())*/,
 
         ]);
     }
