@@ -12,6 +12,7 @@ use Shopware\Core\System\Tag\TagCollection;
 use Werkl\OpenBlogware\Content\Blog\BlogEntriesTranslation\BlogEntriesTranslationCollection;
 use Werkl\OpenBlogware\Content\BlogAuthor\BlogAuthorEntity;
 use Werkl\OpenBlogware\Content\BlogCategory\BlogCategoryCollection;
+use Shopware\Core\Content\Seo\SeoUrl\SeoUrlCollection;
 
 class BlogEntriesEntity extends Entity
 {
@@ -247,5 +248,15 @@ class BlogEntriesEntity extends Entity
     public function setTags(?TagCollection $tags): void
     {
         $this->tags = $tags;
+    }
+    // Neue Getter und Setter für seoUrls
+    public function getSeoUrls(): ?SeoUrlCollection
+    {
+        return $this->seoUrls;
+    }
+
+    public function setSeoUrls(?SeoUrlCollection $seoUrls): void
+    {
+        $this->seoUrls = $seoUrls;
     }
 }
