@@ -83,6 +83,14 @@ class BlogEntriesDefinition extends EntityDefinition
             (new ManyToOneAssociationField('blogAuthor', 'author_id', BlogAuthorDefinition::class, 'id', false))->addFlags(new ApiAware(), new SearchRanking(SearchRanking::ASSOCIATION_SEARCH_RANKING)),
             (new OneToOneAssociationField('cmsPage', 'cms_page_id', 'id', CmsPageDefinition::class, false))->addFlags(new ApiAware()),
             (new ManyToManyAssociationField('tags', TagDefinition::class, 'werkl_blog_entries_tag', 'werkl_blog_entries_id', 'tag_id'))->addFlags(new ApiAware()),
+
+            // SEO-URLs Assoziation hinzufügen
+            (new OneToManyAssociationField(
+                'seoUrls',                    // Name der Assoziation
+                SeoUrlDefinition::class,      // Ziel-Definition
+                'foreign_key',                // Fremdschlüssel in der SEO-URL-Tabelle
+                'id'                          // ID der BlogEntries-Definition
+            ))->addFlags(new ApiAware(), new CascadeDelete()),
         ]);
     }
 }
