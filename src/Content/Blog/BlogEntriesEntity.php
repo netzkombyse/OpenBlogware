@@ -64,6 +64,8 @@ class BlogEntriesEntity extends Entity
      */
     protected ?TagCollection $tags = null;
 
+    protected ?SeoUrlCollection $seoUrls = null;
+
     public function getTitle(): ?string
     {
         return $this->title;
