@@ -101,7 +101,12 @@ class BlogController extends AbstractBlogController
             // SEO-URLs den Blogeinträgen hinzufügen
             foreach ($blogEntries as $blogEntry) {
                 $blogId = $blogEntry->getId();
-                $blogEntry->addExtension('seoUrls', $seoUrlsByBlogId[$blogId] ?? []);
+            
+                // SEO-URLs in eine ArrayStruct umwandeln
+                $seoUrlsStruct = new ArrayStruct($seoUrlsByBlogId[$blogId] ?? []);
+            
+                // Erweiterung hinzufügen
+                $blogEntry->addExtension('seoUrls', $seoUrlsStruct);
             }
         }
     
