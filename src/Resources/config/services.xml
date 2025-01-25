@@ -145,6 +145,7 @@
 
         <service id="Werkl\OpenBlogware\Controller\StoreApi\BlogController" public="true">
             <argument id="werkl_blog_entries.repository" type="service"/>
+            <argument id="seo_url.repository" type="service"/>
         </service>
 
         <!-- End controller -->
