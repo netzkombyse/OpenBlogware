@@ -71,24 +71,38 @@ class BlogController extends AbstractBlogController
     )]
     public function load(Request $request, Criteria $criteria, SalesChannelContext $context): BlogControllerResponse
     {
+        // Kriterien für Blogeinträge aufbauen
         $criteria = $this->buildCriteria($request, $criteria);
-
+    
         // Blogeinträge abrufen
         $blogEntries = $this->blogRepository->search($criteria, $context->getContext());
-
-        // SEO-URLs manuell abrufen und hinzufügen
-        foreach ($blogEntries as $blogEntry) {
+    
+        // IDs der Blogeinträge sammeln
+        $blogIds = $blogEntries->getIds();
+    
+        if (!empty($blogIds)) {
+            // SEO-URLs für alle Blogeinträge in einer Abfrage laden
             $seoCriteria = new Criteria();
-            $seoCriteria->addFilter(new EqualsFilter('foreignKey', $blogEntry->getId()));
-            $seoCriteria->addFilter(new EqualsFilter('routeName', 'werkl.frontend.blog.detail'));
+            $seoCriteria->addFilter(new EqualsAnyFilter('foreignKey', $blogIds)); // Alle Blog-IDs
+            $seoCriteria->addFilter(new EqualsFilter('routeName', 'werkl.frontend.blog.detail')); // Filter für die Route
             $seoCriteria->addFilter(new EqualsFilter('isCanonical', true)); // Optional: nur kanonische URLs
-
+    
             $seoUrls = $this->seoUrlRepository->search($seoCriteria, $context->getContext());
-
-            // SEO-URLs dem Blogeintrag hinzufügen (z. B. als Zusatzfeld)
-            $blogEntry->addExtension('seoUrls', $seoUrls);
+    
+            // SEO-URLs nach Blog-ID gruppieren
+            $seoUrlsByBlogId = [];
+            foreach ($seoUrls as $seoUrl) {
+                $blogId = $seoUrl->getForeignKey();
+                $seoUrlsByBlogId[$blogId][] = $seoUrl;
+            }
+    
+            // SEO-URLs den Blogeinträgen hinzufügen
+            foreach ($blogEntries as $blogEntry) {
+                $blogId = $blogEntry->getId();
+                $blogEntry->addExtension('seoUrls', $seoUrlsByBlogId[$blogId] ?? []);
+            }
         }
-
+    
         return new BlogControllerResponse($blogEntries);
     }
 
