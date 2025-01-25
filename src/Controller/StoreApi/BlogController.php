@@ -20,10 +20,12 @@ class BlogController extends AbstractBlogController
      * @var EntityRepository
      */
     private $blogRepository;
+    private EntityRepository $seoUrlRepository;
 
-    public function __construct(EntityRepository $blogRepository)
+    public function __construct(EntityRepository $blogRepository, EntityRepository $seoUrlRepository)
     {
         $this->blogRepository = $blogRepository;
+        $this->seoUrlRepository = $seoUrlRepository;
     }
 
     public function getDecorated(): AbstractBlogController
@@ -71,7 +73,23 @@ class BlogController extends AbstractBlogController
     {
         $criteria = $this->buildCriteria($request, $criteria);
 
-        return new BlogControllerResponse($this->blogRepository->search($criteria, $context->getContext()));
+        // Blogeinträge abrufen
+        $blogEntries = $this->blogRepository->search($criteria, $context->getContext());
+
+        // SEO-URLs manuell abrufen und hinzufügen
+        foreach ($blogEntries as $blogEntry) {
+            $seoCriteria = new Criteria();
+            $seoCriteria->addFilter(new EqualsFilter('foreignKey', $blogEntry->getId()));
+            $seoCriteria->addFilter(new EqualsFilter('routeName', 'werkl.frontend.blog.detail'));
+            $seoCriteria->addFilter(new EqualsFilter('isCanonical', true)); // Optional: nur kanonische URLs
+
+            $seoUrls = $this->seoUrlRepository->search($seoCriteria, $context->getContext());
+
+            // SEO-URLs dem Blogeintrag hinzufügen (z. B. als Zusatzfeld)
+            $blogEntry->addExtension('seoUrls', $seoUrls);
+        }
+
+        return new BlogControllerResponse($blogEntries);
     }
 
     protected function buildCriteria(Request $request, Criteria $criteria): Criteria
@@ -85,7 +103,7 @@ class BlogController extends AbstractBlogController
             }
         }
 
-        $criteria->addAssociations(['blogAuthor.salutation','blogCategories','tags','cmsPage.sections','cmsPage.sections.blocks','cmsPage.sections.blocks.slots','seoUrls']);
+        $criteria->addAssociations(['blogAuthor.salutation','blogCategories','tags','cmsPage.sections','cmsPage.sections.blocks','cmsPage.sections.blocks.slots']);
         /*$criteria->getAssociation('seoUrls')->addFilter(
             new EqualsFilter('routeName', 'werkl.frontend.blog.detail')
         );*/
